@@ -1,0 +1,1 @@
+Extracts Terraform variable names into a text file for use in other automation/module definitions.
