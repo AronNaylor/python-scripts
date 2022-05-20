@@ -2,8 +2,9 @@
 # DONE: 1) Given a project name create a folder
 # DONE: 2) Download variables.tf file into the local repo
 # DONE: 3) Extract variable names into try syntax and create the module main.tf file
-# TODO: 4) Populate folder structure if required
-# TODO: 5) Handle submodules
+# DONE: 4) Populate folder structure if required
+# DONE: 5) Handle submodules
+# TODO: SOrt out submodule path
 # TODO: Add unit tests
 import re, os, urllib.request
 
@@ -42,7 +43,7 @@ def root_module():
     f.close()
     
 def sub_module():
-    # service_name = re.sub("terraform-aws-", "", module_github_submodule_project_name)
+    parent_service_name = re.sub("terraform-aws-", "", module_github_parent_project_name)
     raw_var_url = f"https://raw.githubusercontent.com/terraform-aws-modules/{module_github_parent_project_name}/{module_version}/modules/{module_github_submodule_project_name}/variables.tf"
     print(f"URL: {raw_var_url}")
     var_file_name = f"{cwd}/{project_name}/{module_github_submodule_project_name}_variables.tf"
@@ -52,7 +53,7 @@ def sub_module():
     f = open(f"{cwd}/{project_name}/{module_github_submodule_project_name}.tf", "a")
     f.write(f"""
                 module "{module_github_submodule_project_name}" {{
-                source  = "terraform-aws-modules/{module_github_submodule_project_name}/aws"
+                source  = "terraform-aws-modules/{parent_service_name}/aws//modules/{module_github_submodule_project_name}"
                 version = "~> {module_version}"
                 
             """)
